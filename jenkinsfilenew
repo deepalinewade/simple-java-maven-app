@@ -1,24 +1,31 @@
-pipeline
-{
-agent any
-stages
-{
-stage('scm checkout'){
-steps{ git branch: 'master', url:'https://github.com/deepalinewade/simple-java-maven-app.git' }}
-
-stage('compile the job'){
-steps{ withMaven{globalMavenSettingsConfig: '', jdk: 'JDK_HOME', maven: 'MVN_HOME', mavenLocalRepo: 'https://github.com/deepalinewade/simple-java-maven-app.git', mavenSettingsConfig: '', traceability: true) {
-    MVN Job Compile } }}
-
-stage('execute unit test framework')   
-{steps { globalMavenSettingsConfig: '', jdk: 'JDK_HOME', maven: 'MVN_HOME', mavenLocalRepo: 'https://github.com/deepalinewade/simple-java-maven-app.git', mavenSettingsConfig: '', traceability: true) {
-    MVN Job Compile } }}
-
-stage('build the code')   
-{steps { globalMavenSettingsConfig: '', jdk: 'JDK_HOME', maven: 'MVN_HOME', mavenLocalRepo: 'https://github.com/deepalinewade/simple-java-maven-app.git', mavenSettingsConfig: '', traceability: true) {
-    MVN Job Compile } }}
-
+pipeline {
+    agent any
+    stages {
+        stage('SCM Checkout') {
+            steps {
+                git branch: 'master', url: 'https://github.com/deepalinewade/simple-java-maven-app.git'
+            }
+        }
+        stage('Compile the Job') {
+            steps {
+                withMaven(globalMavenSettingsConfig: '', jdk: 'JDK_HOME', maven: 'MVN_HOME') {
+                    sh 'mvn compile'
+                }
+            }
+        }
+        stage('Execute Unit Tests') {
+            steps {
+                withMaven(globalMavenSettingsConfig: '', jdk: 'JDK_HOME', maven: 'MVN_HOME') {
+                    sh 'mvn test'
+                }
+            }
+        }
+        stage('Build the Code') {
+            steps {
+                withMaven(globalMavenSettingsConfig: '', jdk: 'JDK_HOME', maven: 'MVN_HOME') {
+                    sh 'mvn package'
+                }
+            }
+        }
+    }
 }
-}
-
-
